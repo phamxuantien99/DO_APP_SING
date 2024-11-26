@@ -57,7 +57,9 @@ react {
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
+
+
 
 /**
  * The preferred build flavor of JavaScriptCore (JSC)
@@ -84,6 +86,11 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+         missingDimensionStrategy 'react-native-camera', 'general' // thêm dòng này
+
+          // Thêm các dòng sau đây để tránh lỗi khi build ứng dụng
+        multiDexEnabled true
     }
     signingConfigs {
         debug {
@@ -111,9 +118,24 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
+    implementation project(':react-native-vector-icons')
+
+    implementation project(':react-native-fs')
+
+    implementation project(':react-native-html-to-pdf')
+
+    
+
+
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
+
 }
+
+
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
